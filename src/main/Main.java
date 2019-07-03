@@ -13,6 +13,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Main extends Application {
@@ -25,13 +27,15 @@ public class Main extends Application {
     public static float SCALE = 1;
 
     //Stores the time since the last frame was loaded
-    public static long deltaTime;
-    public static long lastFrameTime = 0;
+    private static long deltaTime;
+    private static long lastFrameTime = 0;
 
     //Stores the number of frames that have been computed
     public static long frames = 0;
 
-    public static Vector vector = new Vector(new Point2D(500, 500), new Point2D(600, 300));
+    //This list stores all of particles in the entire simulation
+    private ArrayList<Particle> particles = new ArrayList<>();
+
 
     //All graphics are drawn using the GraphicsContext
     private GraphicsContext gc;
@@ -41,6 +45,13 @@ public class Main extends Application {
         //Detecting the screen width and height of the monitor to make the game more responsive
         SCREENHEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
         SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
+
+        //TESTING AREA
+        particles.add(new Particle(100, Color.RED, new Point2D(1000, 1000)));
+        particles.add(new Particle(100, Color.BLUE, new Point2D(700, 800)));
+        particles.add(new Particle(100, Color.VIOLET, new Point2D(500, 500)));
+
+
 
 
         //Forces the game to be played full-screen
@@ -97,14 +108,9 @@ public class Main extends Application {
 
         //All graphics methods go here
         graphics.setFill(Color.BLACK);
-//        for (int i = 0; i < 1000; i++) {
-//            graphics.fillRect(0, 0, rand(0, 1000), rand(0, 1000));
-//        }
 
-        //Drawing a vector - TESTING
-        vector.draw(graphics);
-        System.out.println(vector.getBearingDegrees());
-
+        //Drawing all of the Particles
+        particles.forEach(p -> p.draw(graphics));
 
 
         //Drawing the average FPS in the corner of the screen
@@ -117,7 +123,7 @@ public class Main extends Application {
 
 
     private double getFPS() {
-        return Math.round(1/(deltaTime+Float.MIN_VALUE)*10000000 * 10000.0)/1000.0;
+        return Math.round(1/(deltaTime+Float.MIN_VALUE) * 10000000 * 10000.0)/1000.0;
     }
 
 
