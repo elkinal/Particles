@@ -20,7 +20,7 @@ public class Particle {
         this.color = color;
         this.location = location;
         this.movement = new Point2D(100, 100);
-        this.velocity = new Point2D(1, 1);
+        this.velocity = new Point2D(0, 0);
     }
 
     //Getting the diameter of the particle (assuming it is 3D) // TODO: 03-Jul-19 double-check if this is correct
@@ -63,7 +63,24 @@ public class Particle {
     //This method contains all the calculations performed on the particle each frame
     public void tick() {
         //Moving the particle
+
+        //EXPERIMENTAL - TERMINAL VELOCITY
+        /*int t = 10;
+        if(velocity.getX() > t)
+            velocity = new Point2D(t, velocity.getY());
+        if(velocity.getX() < -t)
+            velocity = new Point2D(-t, velocity.getY());
+        if(velocity.getY() > t)
+            velocity = new Point2D(velocity.getX(), t);
+        if(velocity.getY() < -t)
+            velocity = new Point2D(velocity.getX(), -t);*/
+
+        //Accelerating the particle
         location = location.add(velocity);
+
+
+        //Experimental, displaying the velocity of each particle
+        System.out.println("Xvel: " + velocity.getX() + "Yvel: " + velocity.getY());
     }
 
     //This method draws the particle on the GraphicsContext each frame
@@ -72,7 +89,7 @@ public class Particle {
         graphics.strokeOval(getCenterLocation().getX(), getCenterLocation().getY(), getDimensions(), getDimensions());
 
         //Drawing the movement vectors of each particle (TESTING ONLY - DELETE LATER)
-        drawVector(graphics);
+//        drawVector(graphics);
     }
 
     //Drawing the vector itself, as a line (only for development purposes)

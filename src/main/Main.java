@@ -36,6 +36,9 @@ public class Main extends Application {
     //This list stores all of particles in the entire simulation
     private ArrayList<Particle> particles = new ArrayList<>();
 
+    //Gravitational Constant
+    public static final double GRAV_CONSTANT = 0.01;
+    public static final double DAMPENING = 0.00001;
 
     //All graphics are drawn using the GraphicsContext
     private GraphicsContext gc;
@@ -47,11 +50,19 @@ public class Main extends Application {
         SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
 
         //TESTING AREA
-        particles.add(new Particle(100, Color.RED, new Point2D(1000, 1000)));
-        particles.add(new Particle(100, Color.BLUE, new Point2D(700, 800)));
-        particles.add(new Particle(100, Color.VIOLET, new Point2D(500, 500)));
+//        particles.add(new Particle(100, Color.RED, new Point2D(1000, 1000)));
+//        particles.add(new Particle(1000, Color.BLUE, new Point2D(500, 500)));
+//        particles.add(new Particle(100, Color.VIOLET, new Point2D(300, 550)));
 
+        //ORBITALS TEST
+        /*particles.add(new Particle(1000, Color.RED, new Point2D(800, 500)));
+        particles.add(new Particle(100, Color.RED, new Point2D(500, 500)));
+        particles.get(1).accelerate(new Point2D(0, 1.4));*/
 
+        //RANDOM PARTICLE TEST
+        for (int i = 0; i < 30; i++) {
+            particles.add(new Particle((int)rand(50,200), Color.RED, new Point2D(rand(0, 1920), rand(0, 1080))));
+        }
 
 
         //Forces the game to be played full-screen
@@ -129,22 +140,28 @@ public class Main extends Application {
 
     private void update() {
        //All calculations go here
-
         //Physics Calculations
         for (int i = 0; i < particles.size(); i++) {
             for (int j = 0; j < particles.size(); j++) {
                 //This calculates the total force between two particles. If the two particles are the same, the returned force is -1
-                //EXPERIMENTAL CODE
+                // TODO: 04-Jul-19 There seems to be an element of randomness in the way the particles behave. This should not be the case. This is almost certainly linked to the variation in the FPS
+                //EXPERIMENTAL CODE ------------------------------------------------------------------------------------
                 double force = (particles.get(i) != particles.get(j)) ?
-                        (particles.get(i).getMass() * particles.get(j).getMass() / particles.get(j).getLocation().distance(particles.get(i).getLocation())) : -1;
+                        (particles.get(i).getMass() * particles.get(j).getMass() / Math.pow(particles.get(j).getLocation().distance(particles.get(i).getLocation()), 2) + DAMPENING) : -1;
 
-                double xDifference = particles.get(j).getLocation().getX() - particles.get(i).getLocation().getX();
+                double xDifference = particles.get(i).getLocation().getX() - particles.get(j).getLocation().getX();
+                double yDifference = particles.get(i).getLocation().getY() - particles.get(j).getLocation().getY();
+                double acceleration = force / particles.get(j).getMass();
+                if(force > 0) {
+                    particles.get(j).accelerate(new Point2D(xDifference * GRAV_CONSTANT * force * acceleration * deltaTime/1000000,
+                            yDifference * GRAV_CONSTANT * force * acceleration * deltaTime/1000000));
+                }
 
-//                double newX = force * xDifference / 1000;
 
-
-                System.out.println("Force between " + j + " and " + i + " is: " + force);
+//                System.out.println("Force between " + j + " and " + i + " is: " + force);
             }
+            //EXPERIMENTAL - TERMINAL VELOCITY
+
         }
 
         //Ticking the Particles
@@ -153,6 +170,8 @@ public class Main extends Application {
         //Incrementing the number of elapsed frames (for development purposes)
         frames++;
     }
+
+
 
 
 
