@@ -130,6 +130,27 @@ public class Main extends Application {
     private void update() {
        //All calculations go here
 
+        //Physics Calculations
+        for (int i = 0; i < particles.size(); i++) {
+            for (int j = 0; j < particles.size(); j++) {
+                //This calculates the total force between two particles. If the two particles are the same, the returned force is -1
+                //EXPERIMENTAL CODE
+                double force = (particles.get(i) != particles.get(j)) ?
+                        (particles.get(i).getMass() * particles.get(j).getMass() / particles.get(j).getLocation().distance(particles.get(i).getLocation())) : -1;
+
+                double xDifference = particles.get(j).getLocation().getX() - particles.get(i).getLocation().getX();
+
+//                double newX = force * xDifference / 1000;
+
+
+                System.out.println("Force between " + j + " and " + i + " is: " + force);
+            }
+        }
+
+        //Ticking the Particles
+        particles.forEach(p -> p.tick());
+
+        //Incrementing the number of elapsed frames (for development purposes)
         frames++;
     }
 
