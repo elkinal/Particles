@@ -140,7 +140,7 @@ public class Main extends Application {
 
     private void update() {
        //All calculations go here
-        //Physics Calculations
+        //Physics Calculations - MOVEMENT
         for (int i = 0; i < particles.size(); i++) {
             for (int j = 0; j < particles.size(); j++) {
                 //This calculates the total force between two particles. If the two particles are the same, the returned force is -1
@@ -160,8 +160,25 @@ public class Main extends Application {
 
 //                System.out.println("Force between " + j + " and " + i + " is: " + force);
             }
-            //EXPERIMENTAL - TERMINAL VELOCITY
+        }
 
+        //Physics Calculations - COLLISION DETECTION
+        for (int i = 0; i < particles.size(); i++) {
+            for (int j = 0; j < particles.size(); j++) {
+                if(particles.get(j).getLocation().distance(particles.get(i).getLocation())
+                        < (particles.get(j).getDimensions()/2 + particles.get(i).getDimensions()/2)
+                        && particles.get(i) != particles.get(j)) {
+                    if(particles.get(j).getMass() > particles.get(i).getMass()) {
+                        particles.get(j).addMass(particles.get(i).getMass());
+                        particles.remove(particles.get(i));
+                    }
+                    else {
+                        particles.get(i).addMass(particles.get(j).getMass());
+                        particles.remove(particles.get(j));
+                    }
+
+                }
+            }
         }
 
         //Ticking the Particles

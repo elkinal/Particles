@@ -13,7 +13,7 @@ public class Particle {
     private Color color;
     private Point2D movement;
     private Point2D location;
-    private Point2D velocity;
+    public Point2D velocity;
 
     public Particle(int mass, Color color, Point2D location) {
         this.mass = mass;
@@ -44,6 +44,11 @@ public class Particle {
     //Getter for the mass of the particle
     public int getMass() {
         return mass;
+    }
+
+    //Adder for the mass of the particle
+    public void addMass(double mass) {
+        this.mass += mass;
     }
 
     //Getter for the movement
