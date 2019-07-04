@@ -13,7 +13,7 @@ public class Particle {
     private Color color;
     private Point2D movement;
     private Point2D location;
-    public Point2D velocity;
+    private Point2D velocity;
 
     public Particle(int mass, Color color, Point2D location) {
         this.mass = mass;
@@ -65,6 +65,17 @@ public class Particle {
     public void accelerate(Point2D velocity) {
         this.velocity = this.velocity.add(velocity);
     }
+
+    //Setter for the velocity
+    public void setVelocity(Point2D velocity) {
+        this.velocity = velocity;
+    }
+
+    //Getter for the velocity
+    public Point2D getVelocity() {
+        return this.velocity;
+    }
+
     //This method contains all the calculations performed on the particle each frame
     public void tick() {
         //Moving the particle
@@ -85,7 +96,7 @@ public class Particle {
 
 
         //Experimental, displaying the velocity of each particle
-        System.out.println("Xvel: " + velocity.getX() + "Yvel: " + velocity.getY());
+//        System.out.println("Xvel: " + velocity.getX() + "Yvel: " + velocity.getY());
     }
 
     //This method draws the particle on the GraphicsContext each frame

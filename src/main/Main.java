@@ -37,7 +37,7 @@ public class Main extends Application {
     private ArrayList<Particle> particles = new ArrayList<>();
 
     //Gravitational Constant
-    public static final double GRAV_CONSTANT = 0.01;
+    public static final double GRAV_CONSTANT = 0.001;
     public static final double DAMPENING = 0.00001;
 
     //All graphics are drawn using the GraphicsContext
@@ -50,9 +50,15 @@ public class Main extends Application {
         SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
 
         //TESTING AREA
-//        particles.add(new Particle(100, Color.RED, new Point2D(1000, 1000)));
-//        particles.add(new Particle(1000, Color.BLUE, new Point2D(500, 500)));
-//        particles.add(new Particle(100, Color.VIOLET, new Point2D(300, 550)));
+        particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
+        particles.add(new Particle(100, Color.RED, new Point2D(800, 500)));
+        particles.add(new Particle(100, Color.RED, new Point2D(1000, 500)));
+        particles.add(new Particle(100, Color.BLUE, new Point2D(650, 500)));
+
+        particles.get(0).setVelocity(new Point2D(1, 0));
+        particles.get(1).setVelocity(new Point2D(-1, 0));
+        particles.get(2).setVelocity(new Point2D(-1, 0));
+        particles.get(3).setVelocity(new Point2D(-1, 0));
 
         //ORBITALS TEST
         /*particles.add(new Particle(1000, Color.RED, new Point2D(800, 500)));
@@ -60,9 +66,9 @@ public class Main extends Application {
         particles.get(1).accelerate(new Point2D(0, 1.4));*/
 
         //RANDOM PARTICLE TEST
-        for (int i = 0; i < 30; i++) {
+        /*for (int i = 0; i < 30; i++) {
             particles.add(new Particle((int)rand(50,200), Color.RED, new Point2D(rand(0, 1920), rand(0, 1080))));
-        }
+        }*/
 
 
         //Forces the game to be played full-screen
@@ -169,10 +175,37 @@ public class Main extends Application {
                         < (particles.get(j).getDimensions()/2 + particles.get(i).getDimensions()/2)
                         && particles.get(i) != particles.get(j)) {
                     if(particles.get(j).getMass() > particles.get(i).getMass()) {
+                        //Larger particle changes its trajectory according to Newton's Third Law
+                        particles.get(j).setVelocity(
+                                new Point2D(
+                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
+                                                particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
+                                                (particles.get(j).getMass() + particles.get(i).getMass()),
+
+                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
+                                                particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
+                                                (particles.get(j).getMass() + particles.get(i).getMass())
+                                )
+                        );
+                        //Larger particle absorbs smaller particle
                         particles.get(j).addMass(particles.get(i).getMass());
                         particles.remove(particles.get(i));
                     }
                     else {
+
+                        //Larger particle changes its trajectory according to Newton's Third Law
+                        particles.get(i).setVelocity(
+                                new Point2D(
+                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
+                                                particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
+                                                (particles.get(i).getMass() + particles.get(j).getMass()),
+
+                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
+                                                particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
+                                                (particles.get(i).getMass() + particles.get(j).getMass())
+                                )
+                        );
+                        //Larger particle absorbs smaller particle
                         particles.get(i).addMass(particles.get(j).getMass());
                         particles.remove(particles.get(j));
                     }
@@ -181,6 +214,8 @@ public class Main extends Application {
             }
         }
 
+        //EXPERIMENTAL DISPLAY OF VELOCITIES
+        System.out.println(particles.get(0).getVelocity().getX());
         //Ticking the Particles
         particles.forEach(p -> p.tick());
 
