@@ -80,7 +80,8 @@ public class Particle {
             velocity = new Point2D(velocity.getX(), -t);*/
 
         //Accelerating the particle
-        location = location.add(velocity);
+        if(!Main.paused)
+            location = location.add(velocity);
 
 
         //Experimental, displaying the velocity of each particle

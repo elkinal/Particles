@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -14,6 +15,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -37,8 +39,17 @@ public class Main extends Application {
     private ArrayList<Particle> particles = new ArrayList<>();
 
     //Gravitational Constant
-    public static final double GRAV_CONSTANT = 0.001;
+    public static double GRAV_CONSTANT = 0.001;
     public static final double DAMPENING = 0.00000;
+
+    //Self-Explanatory
+    public static boolean paused = false;
+
+    //The Background Image
+    private static Image background;
+
+    //The size of the particle created when the user clicks on the screen
+    public static int particleSize = 100;
 
     //All graphics are drawn using the GraphicsContext
     private GraphicsContext gc;
@@ -48,6 +59,9 @@ public class Main extends Application {
         //Detecting the screen width and height of the monitor to make the game more responsive
         SCREENHEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
         SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
+
+        //Initializing the background image
+        background = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\background.png"));
 
         //TESTING AREA
         /*particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
@@ -82,20 +96,19 @@ public class Main extends Application {
 
         //Responding to the inputs of the user
         scene.setOnKeyPressed(event -> {
-            /*if(event.getCode() == KeyCode.Q)
-                scale += 0.25;*/
+            if(event.getCode() == KeyCode.SPACE)
+                paused = !paused;
         });
         scene.setOnMouseClicked(event -> {
-            particles.add(new Particle(100, Color.BLACK, new Point2D(event.getX(), event.getY())));
+            particles.add(new Particle(particleSize, Color.BLACK, new Point2D(event.getX(), event.getY())));
         });
 
+        //Allowing the user to change the size of the created particle using the scroll wheel
         scene.setOnScroll(event -> {
-            if(event.getDeltaY() < 0) {
-                SCALE += 0.1;
-            }
-            else {
-                SCALE -= 0.1;
-            }
+            if(event.getDeltaY() < 0)
+                particleSize += 50;
+            else
+                particleSize -= (particleSize > 20) ? 20 : 0;
         });
 
 
@@ -127,6 +140,9 @@ public class Main extends Application {
 
         //Clearing the screen
         graphics.clearRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
+
+        //Drawing the Background
+        graphics.drawImage(background, 0, 0, SCREENWIDTH, SCREENHEIGHT);
 
         //All graphics methods go here
         graphics.setFill(Color.BLACK);
