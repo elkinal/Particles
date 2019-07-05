@@ -38,7 +38,7 @@ public class Main extends Application {
 
     //Gravitational Constant
     public static final double GRAV_CONSTANT = 0.001;
-    public static final double DAMPENING = 0.00001;
+    public static final double DAMPENING = 0.00000;
 
     //All graphics are drawn using the GraphicsContext
     private GraphicsContext gc;
@@ -50,7 +50,7 @@ public class Main extends Application {
         SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
 
         //TESTING AREA
-        particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
+        /*particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
         particles.add(new Particle(100, Color.RED, new Point2D(800, 500)));
         particles.add(new Particle(100, Color.RED, new Point2D(1000, 500)));
         particles.add(new Particle(100, Color.BLUE, new Point2D(650, 500)));
@@ -58,17 +58,17 @@ public class Main extends Application {
         particles.get(0).setVelocity(new Point2D(1, 0));
         particles.get(1).setVelocity(new Point2D(-1, 0));
         particles.get(2).setVelocity(new Point2D(-1, 0));
-        particles.get(3).setVelocity(new Point2D(-1, 0));
+        particles.get(3).setVelocity(new Point2D(-1, 0));*/
 
         //ORBITALS TEST
-        /*particles.add(new Particle(1000, Color.RED, new Point2D(800, 500)));
+        /*particles.add(new Particle(1000, Color.RED, new Point2D(600, 500)));
         particles.add(new Particle(100, Color.RED, new Point2D(500, 500)));
-        particles.get(1).accelerate(new Point2D(0, 1.4));*/
+        particles.get(1).accelerate(new Point2D(0, 1.75));*/
 
         //RANDOM PARTICLE TEST
-        /*for (int i = 0; i < 30; i++) {
-            particles.add(new Particle((int)rand(50,200), Color.RED, new Point2D(rand(0, 1920), rand(0, 1080))));
-        }*/
+        for (int i = 0; i < 300; i++) {
+            particles.add(new Particle((int)rand(10,10), Color.RED, new Point2D(rand(0, 1920), rand(0, 1080))));
+        }
 
 
         //Forces the game to be played full-screen

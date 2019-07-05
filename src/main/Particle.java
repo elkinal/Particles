@@ -11,7 +11,6 @@ import static java.lang.Math.*;
 public class Particle {
     private int mass;
     private Color color;
-    private Point2D movement;
     private Point2D location;
     private Point2D velocity;
 
@@ -19,7 +18,6 @@ public class Particle {
         this.mass = mass;
         this.color = color;
         this.location = location;
-        this.movement = new Point2D(100, 100);
         this.velocity = new Point2D(0, 0);
     }
 
@@ -49,16 +47,6 @@ public class Particle {
     //Adder for the mass of the particle
     public void addMass(double mass) {
         this.mass += mass;
-    }
-
-    //Getter for the movement
-    public Point2D getMovement() {
-        return movement;
-    }
-
-    //Setter for the Movement Vector
-    public void setMovement(Point2D movement) {
-        this.movement = movement;
     }
 
     //This function changes the velocity off the particle
@@ -108,16 +96,4 @@ public class Particle {
 //        drawVector(graphics);
     }
 
-    //Drawing the vector itself, as a line (only for development purposes)
-    public void drawVector(GraphicsContext graphics) {
-        //Setting the color of the line
-        graphics.setFill(Color.BLACK);
-
-        //Drawing the main body of the line
-        graphics.strokeLine(location.getX(), location.getY(), location.getX()+movement.getX(), location.getY()+movement.getY());
-
-        //Drawing a point at the end of the line
-        graphics.fillRect(location.getX()-2, location.getY()-2, 4, 4);
-
-    }
 }
