@@ -91,9 +91,6 @@ public class Particle {
     public void draw(GraphicsContext graphics) {
         graphics.setStroke(color);
         graphics.strokeOval(getCenterLocation().getX(), getCenterLocation().getY(), getDimensions(), getDimensions());
-
-        //Drawing the movement vectors of each particle (TESTING ONLY - DELETE LATER)
-//        drawVector(graphics);
     }
 
 }

@@ -66,8 +66,8 @@ public class Main extends Application {
         particles.get(1).accelerate(new Point2D(0, 1.75));*/
 
         //RANDOM PARTICLE TEST
-        for (int i = 0; i < 300; i++) {
-            particles.add(new Particle((int)rand(10,10), Color.RED, new Point2D(rand(0, 1920), rand(0, 1080))));
+        for (int i = 0; i < 10; i++) {
+            particles.add(new Particle((int)rand(100,200), Color.BLUE, new Point2D(rand(0, 1920), rand(0, 1080))));
         }
 
 
@@ -86,11 +86,16 @@ public class Main extends Application {
                 scale += 0.25;*/
         });
         scene.setOnMouseClicked(event -> {
-            //event
+            particles.add(new Particle(100, Color.BLACK, new Point2D(event.getX(), event.getY())));
         });
 
         scene.setOnScroll(event -> {
-            //change scale
+            if(event.getDeltaY() < 0) {
+                SCALE += 0.1;
+            }
+            else {
+                SCALE -= 0.1;
+            }
         });
 
 
@@ -169,6 +174,7 @@ public class Main extends Application {
         }
 
         //Physics Calculations - COLLISION DETECTION
+        // TODO: 05-Jul-19 unexpected ArrayIndexOutOfBoundsException can rarely arise in the collision detection part
         for (int i = 0; i < particles.size(); i++) {
             for (int j = 0; j < particles.size(); j++) {
                 if(particles.get(j).getLocation().distance(particles.get(i).getLocation())
@@ -214,8 +220,6 @@ public class Main extends Application {
             }
         }
 
-        //EXPERIMENTAL DISPLAY OF VELOCITIES
-        System.out.println(particles.get(0).getVelocity().getX());
         //Ticking the Particles
         particles.forEach(p -> p.tick());
 
