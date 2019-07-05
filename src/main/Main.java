@@ -155,6 +155,7 @@ public class Main extends Application {
         graphics.setFill(Color.GREEN);
         graphics.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         graphics.fillText("FPS: " + getFPS(), SCREENWIDTH-65, 12);
+        graphics.fillText("Particles: " + particles.size(), SCREENWIDTH-100, 24);
 
         //Resetting the screen
     }

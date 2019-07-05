@@ -64,6 +64,11 @@ public class Particle {
         return this.velocity;
     }
 
+    //Checks if the position of the particle is within the boundaries of the screen
+    private boolean onScreen() {
+        return !(location.getX() + getDimensions() < 0 || location.getX() - getDimensions() > Main.SCREENWIDTH
+                || location.getY() + getDimensions() < 0 || location.getY() - getDimensions() > Main.SCREENHEIGHT);
+    }
     //This method contains all the calculations performed on the particle each frame
     public void tick() {
         //Moving the particle
@@ -90,8 +95,10 @@ public class Particle {
 
     //This method draws the particle on the GraphicsContext each frame
     public void draw(GraphicsContext graphics) {
-        graphics.setStroke(color);
-        graphics.strokeOval(getCenterLocation().getX(), getCenterLocation().getY(), getDimensions(), getDimensions());
+        if(onScreen()) {
+            graphics.setStroke(color);
+            graphics.strokeOval(getCenterLocation().getX(), getCenterLocation().getY(), getDimensions(), getDimensions());
+        }
     }
 
 }
