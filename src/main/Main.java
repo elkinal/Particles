@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -48,6 +49,9 @@ public class Main extends Application {
     //The Background Image
     private static Image background;
 
+    //The Cursor Image
+    private static Image cursor;
+
     //The size of the particle created when the user clicks on the screen
     public static int particleSize = 100;
 
@@ -62,6 +66,7 @@ public class Main extends Application {
 
         //Initializing the background image
         background = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\background.png"));
+        cursor = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\cursor.png"));
 
         //TESTING AREA
         /*particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
@@ -93,6 +98,9 @@ public class Main extends Application {
         //Structural stuff for the window
         Group root = new Group();
         Scene scene = new Scene(root);
+
+        //Changing the default cursor
+        scene.setCursor(new ImageCursor(cursor));
 
         //Responding to the inputs of the user
         scene.setOnKeyPressed(event -> {
