@@ -46,11 +46,10 @@ public class Main extends Application {
     //Self-Explanatory
     public static boolean paused = false;
 
-    //The Background Image
+    //Images
     private static Image background;
-
-    //The Cursor Image
     private static Image cursor;
+    private static Image pauseScreen;
 
     //The size of the particle created when the user clicks on the screen
     public static int particleSize = 100;
@@ -67,6 +66,7 @@ public class Main extends Application {
         //Initializing the background image
         background = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\background.png"));
         cursor = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\cursor.png"));
+        pauseScreen = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\paused_screen.png"));
 
         //TESTING AREA
         /*particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
@@ -86,12 +86,12 @@ public class Main extends Application {
 
         //RANDOM PARTICLE TEST
         for (int i = 0; i < 10; i++) {
-            particles.add(new Particle((int)rand(100,200), Color.BLUE, new Point2D(rand(0, 1920), rand(0, 1080))));
+            particles.add(new Particle((int)rand(10,10), Color.BLUE, new Point2D(rand(0, 1920), rand(0, 1080))));
         }
 
 
         //Forces the game to be played full-screen
-        primaryStage.setTitle("Elkin's cool game");
+        primaryStage.setTitle("N-Body Simulation");
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
@@ -165,6 +165,9 @@ public class Main extends Application {
         graphics.fillText("FPS: " + getFPS(), SCREENWIDTH-65, 12);
         graphics.fillText("Particles: " + particles.size(), SCREENWIDTH-100, 24);
 
+        //Drawing the pause screen when the game is paused
+        if(paused)
+            graphics.drawImage(pauseScreen, 0, 0, SCREENWIDTH, SCREENHEIGHT);
         //Resetting the screen
     }
 
