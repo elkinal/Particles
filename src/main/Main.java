@@ -40,7 +40,7 @@ public class Main extends Application {
     private ArrayList<Particle> particles = new ArrayList<>();
 
     //Gravitational Constant
-    public static double GRAV_CONSTANT = 0.001;
+    public static double GRAV_CONSTANT = 0.1;
     public static final double DAMPENING = 0.00000;
 
     //Self-Explanatory
@@ -85,8 +85,8 @@ public class Main extends Application {
         particles.get(1).accelerate(new Point2D(0, 1.75));*/
 
         //RANDOM PARTICLE TEST
-        for (int i = 0; i < 10; i++) {
-            particles.add(new Particle((int)rand(10,10), Color.BLUE, new Point2D(rand(0, 1920), rand(0, 1080))));
+        for (int i = 0; i < 100; i++) {
+            particles.add(new Particle((int)rand(10,10), Color.BLACK, new Point2D(rand(0, 1920), rand(0, 1080))));
         }
 
 
@@ -108,7 +108,7 @@ public class Main extends Application {
                 paused = !paused;
         });
         scene.setOnMouseClicked(event -> {
-            particles.add(new Particle(particleSize, Color.BLACK, new Point2D(event.getX(), event.getY())));
+            particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX(), event.getY())));
         });
 
         //Allowing the user to change the size of the created particle using the scroll wheel
@@ -144,16 +144,13 @@ public class Main extends Application {
     }
 
 
-    private void render(GraphicsContext graphics) { //synchronizing the block does not solve the error
+    private void render(GraphicsContext graphics) {
 
         //Clearing the screen
         graphics.clearRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
 
         //Drawing the Background
         graphics.drawImage(background, 0, 0, SCREENWIDTH, SCREENHEIGHT);
-
-        //All graphics methods go here
-        graphics.setFill(Color.BLACK);
 
         //Drawing all of the Particles
         particles.forEach(p -> p.draw(graphics));
@@ -192,8 +189,8 @@ public class Main extends Application {
                 double yDifference = particles.get(i).getLocation().getY() - particles.get(j).getLocation().getY();
                 double acceleration = force / particles.get(j).getMass();
                 if(force > 0) {
-                    particles.get(j).accelerate(new Point2D(xDifference * GRAV_CONSTANT * force * acceleration * deltaTime/1000000,
-                            yDifference * GRAV_CONSTANT * force * acceleration * deltaTime/1000000));
+                    particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/1000000,
+                            Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/1000000));
                 }
 
 
