@@ -16,6 +16,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,20 +46,21 @@ public class Main extends Application {
 
     //Self-Explanatory
     public static boolean paused = false;
+    public static boolean drawPath = false;
 
     //Images
     private static Image background;
-    private static Image cursor;
     private static Image pauseScreen;
 
     //The size of the particle created when the user clicks on the screen
     public static int particleSize = 100;
-    public static Point2D particleVelocity = new Point2D(0, 0);
+
+    //Stores the points at which the user clicks and releases the right mouse button respectively
+    Point2D[] particlePositions = new Point2D[2];
 
     //All graphics are drawn using the GraphicsContext
     private GraphicsContext gc;
 
-    //The state of the game
 
 
     @Override
@@ -69,7 +71,7 @@ public class Main extends Application {
 
         //Initializing the background image
         background = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\background.png"));
-        cursor = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\cursor.png"));
+        Image cursor = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\cursor.png"));
         pauseScreen = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\paused_screen.png"));
 
         //TESTING AREA
@@ -106,14 +108,35 @@ public class Main extends Application {
         //Changing the default cursor
         scene.setCursor(new ImageCursor(cursor));
 
-        //Responding to the inputs of the user
+        //Responding to Keystrokes
         scene.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.SPACE)
                 paused = !paused;
         });
-        scene.setOnMouseClicked(event -> {
-            particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX()+16, event.getY()+16)));
+
+
+        //Responding to when a mouse button is pressed
+        scene.setOnMousePressed(event -> {
+            if(event.getButton() == MouseButton.PRIMARY)
+                particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX()+16, event.getY()+16)));
+            else if(event.getButton() == MouseButton.SECONDARY) {
+                particlePositions[0] = new Point2D(event.getX(), event.getY());
+                drawPath = true;
+            }
         });
+
+        //Responding to when the right mouse button is released
+        scene.setOnMouseReleased(event -> {
+            if(event.getButton() == MouseButton.SECONDARY) {
+                drawPath = false;
+                particlePositions[1] = new Point2D(event.getX(), event.getY());
+                particles.add(new Particle(particleSize, Color.DARKBLUE, particlePositions[0].add(16,16), new Point2D(
+                        (particlePositions[1].getX() - particlePositions[0].getX()) / 50,
+                        (particlePositions[1].getY() - particlePositions[0].getY()) / 50
+                )));
+            }
+        });
+
 
         //Allowing the user to change the size of the created particle using the scroll wheel
         scene.setOnScroll(event -> {
@@ -159,24 +182,34 @@ public class Main extends Application {
         //Drawing all of the Particles
         particles.forEach(p -> p.draw(graphics));
 
-
         //Drawing the average FPS in the corner of the screen
         graphics.setFill(Color.GREEN);
         graphics.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         graphics.fillText("FPS: " + getFPS(), SCREENWIDTH-65, 12);
         graphics.fillText("Particles: " + particles.size(), SCREENWIDTH-100, 24);
 
+        //Drawing a line to show the path a particle will take when the user creates a particle with an initial velocity
+        if(drawPath) {
+            drawPathLine(graphics);
+        }
+
         //Drawing the pause screen when the game is paused
         if(paused)
             graphics.drawImage(pauseScreen, 0, 0, SCREENWIDTH, SCREENHEIGHT);
-        //Resetting the screen
     }
 
+    private void drawPathLine(GraphicsContext graphics) {
+        graphics.setStroke(Color.RED);
+        graphics.strokeLine(
+                particlePositions[0].getX()+16, particlePositions[0].getY()+16,
+                particlePositions[0].getX()+16 - (particlePositions[0].getX() - MouseInfo.getPointerInfo().getLocation().getX()+16)/5,
+                particlePositions[0].getY()+16 - (particlePositions[0].getY() - MouseInfo.getPointerInfo().getLocation().getY()+16)/5
+        );
+    }
 
     private double getFPS() {
         return Math.round(1/(deltaTime+Float.MIN_VALUE) * 10000000 * 10000.0)/1000.0;
     }
-
 
     private void update() {
         //All calculations go here

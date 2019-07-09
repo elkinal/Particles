@@ -21,6 +21,14 @@ public class Particle {
         this.velocity = new Point2D(0, 0);
     }
 
+    //A constructor that includes the velocity as well as all of the other parameters
+    public Particle(int mass, Color color, Point2D location, Point2D velocity) {
+        this.mass = mass;
+        this.color = color;
+        this.location = location;
+        this.velocity = velocity;
+    }
+
     //Getting the diameter of the particle (assuming it is 3D) // TODO: 03-Jul-19 double-check if this is correct
     public double getDimensions() {
         return 2 * cbrt(mass * 3/4 * PI) * Main.SCALE;
