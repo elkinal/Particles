@@ -53,9 +53,13 @@ public class Main extends Application {
 
     //The size of the particle created when the user clicks on the screen
     public static int particleSize = 100;
+    public static Point2D particleVelocity = new Point2D(0, 0);
 
     //All graphics are drawn using the GraphicsContext
     private GraphicsContext gc;
+
+    //The state of the game
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -108,7 +112,7 @@ public class Main extends Application {
                 paused = !paused;
         });
         scene.setOnMouseClicked(event -> {
-            particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX(), event.getY())));
+            particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX()+16, event.getY()+16)));
         });
 
         //Allowing the user to change the size of the created particle using the scroll wheel
@@ -175,7 +179,7 @@ public class Main extends Application {
 
 
     private void update() {
-       //All calculations go here
+        //All calculations go here
         //Physics Calculations - MOVEMENT
         for (int i = 0; i < particles.size(); i++) {
             for (int j = 0; j < particles.size(); j++) {
@@ -187,14 +191,10 @@ public class Main extends Application {
 
                 double xDifference = particles.get(i).getLocation().getX() - particles.get(j).getLocation().getX();
                 double yDifference = particles.get(i).getLocation().getY() - particles.get(j).getLocation().getY();
-                double acceleration = force / particles.get(j).getMass();
                 if(force > 0) {
-                    particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/1000000,
-                            Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/1000000));
+                    particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/100000,
+                            Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/100000));
                 }
-
-
-//                System.out.println("Force between " + j + " and " + i + " is: " + force);
             }
         }
 
