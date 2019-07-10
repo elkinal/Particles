@@ -95,11 +95,9 @@ public class Particle {
         //Accelerating the particle
         if(!Main.paused)
             location = location.add(velocity);
-
-
-        //Experimental, displaying the velocity of each particle
-//        System.out.println("Xvel: " + velocity.getX() + "Yvel: " + velocity.getY());
     }
+
+
 
     //This method draws the particle on the GraphicsContext each frame
     public void draw(GraphicsContext graphics) {

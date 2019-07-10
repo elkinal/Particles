@@ -31,7 +31,7 @@ public class Main extends Application {
     public static float SCALE = 1;
 
     //Stores the time since the last frame was loaded
-    private static long deltaTime;
+    public static long deltaTime;
     private static long lastFrameTime = 0;
 
     //Stores the number of frames that have been computed
@@ -89,6 +89,7 @@ public class Main extends Application {
         /*particles.add(new Particle(1000, Color.RED, new Point2D(600, 500)));
         particles.add(new Particle(100, Color.RED, new Point2D(500, 500)));
         particles.get(1).accelerate(new Point2D(0, 1.75));*/
+//        particles.add(new Particle(100, Color.BLUE, new Point2D(0, 500), new Point2D(5, 0)));
 
         //RANDOM PARTICLE TEST
         for (int i = 0; i < 100; i++) {
@@ -177,7 +178,7 @@ public class Main extends Application {
         graphics.clearRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
 
         //Drawing the Background
-        graphics.drawImage(background, 0, 0, SCREENWIDTH, SCREENHEIGHT);
+//        graphics.drawImage(background, 0, 0, SCREENWIDTH, SCREENHEIGHT);
 
         //Drawing all of the Particles
         particles.forEach(p -> p.draw(graphics));
@@ -225,16 +226,11 @@ public class Main extends Application {
                 double xDifference = particles.get(i).getLocation().getX() - particles.get(j).getLocation().getX();
                 double yDifference = particles.get(i).getLocation().getY() - particles.get(j).getLocation().getY();
                 if(force > 0) {
-                    particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/100000,
-                            Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass() * deltaTime/100000));
+                    particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass(),
+                            Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass()));
                 }
-            }
-        }
-
-        //Physics Calculations - COLLISION DETECTION
-        // TODO: 05-Jul-19 unexpected ArrayIndexOutOfBoundsException can rarely arise in the collision detection part
-        for (int i = 0; i < particles.size(); i++) {
-            for (int j = 0; j < particles.size(); j++) {
+                //Physics Calculations - COLLISION DETECTION
+                // TODO: 05-Jul-19 unexpected ArrayIndexOutOfBoundsException can rarely arise in the collision detection part
                 if(particles.get(j).getLocation().distance(particles.get(i).getLocation())
                         < (particles.get(j).getDimensions()/2 + particles.get(i).getDimensions()/2)
                         && particles.get(i) != particles.get(j)) {
@@ -277,6 +273,52 @@ public class Main extends Application {
                 }
             }
         }
+
+
+//        for (int i = 0; i < particles.size(); i++) {
+//            for (int j = 0; j < particles.size(); j++) {
+//                if(particles.get(j).getLocation().distance(particles.get(i).getLocation())
+//                        < (particles.get(j).getDimensions()/2 + particles.get(i).getDimensions()/2)
+//                        && particles.get(i) != particles.get(j)) {
+//                    if(particles.get(j).getMass() > particles.get(i).getMass()) {
+//                        //Larger particle changes its trajectory according to Newton's Third Law
+//                        particles.get(j).setVelocity(
+//                                new Point2D(
+//                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
+//                                                particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
+//                                                (particles.get(j).getMass() + particles.get(i).getMass()),
+//
+//                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
+//                                                particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
+//                                                (particles.get(j).getMass() + particles.get(i).getMass())
+//                                )
+//                        );
+//                        //Larger particle absorbs smaller particle
+//                        particles.get(j).addMass(particles.get(i).getMass());
+//                        particles.remove(particles.get(i));
+//                    }
+//                    else {
+//
+//                        //Larger particle changes its trajectory according to Newton's Third Law
+//                        particles.get(i).setVelocity(
+//                                new Point2D(
+//                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
+//                                                particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
+//                                                (particles.get(i).getMass() + particles.get(j).getMass()),
+//
+//                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
+//                                                particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
+//                                                (particles.get(i).getMass() + particles.get(j).getMass())
+//                                )
+//                        );
+//                        //Larger particle absorbs smaller particle
+//                        particles.get(i).addMass(particles.get(j).getMass());
+//                        particles.remove(particles.get(j));
+//                    }
+//
+//                }
+//            }
+//        }
 
         //Ticking the Particles
         particles.forEach(p -> p.tick());
