@@ -93,8 +93,10 @@ public class Particle {
             velocity = new Point2D(velocity.getX(), -t);*/
 
         //Accelerating the particle
-        if(!Main.paused)
+        if(!Main.paused) {
             location = location.add(velocity);
+            location = location.add(velocity.getX() * Main.deltaTime/1000000, velocity.getY() * Main.deltaTime/1000000);
+        }
     }
 
 

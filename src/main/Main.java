@@ -215,61 +215,62 @@ public class Main extends Application {
     private void update() {
         //All calculations go here
         //Physics Calculations - MOVEMENT
-        for (int i = 0; i < particles.size(); i++) {
-            for (int j = 0; j < particles.size(); j++) {
-                //This calculates the total force between two particles. If the two particles are the same, the returned force is -1
-                // TODO: 04-Jul-19 There seems to be an element of randomness in the way the particles behave. This should not be the case. This is almost certainly linked to the variation in the FPS
-                //EXPERIMENTAL CODE ------------------------------------------------------------------------------------
-                double force = (particles.get(i) != particles.get(j)) ?
-                        (particles.get(i).getMass() * particles.get(j).getMass() / Math.pow(particles.get(j).getLocation().distance(particles.get(i).getLocation()), 2) + DAMPENING) : -1;
+        if(!paused) {
+            for (int i = 0; i < particles.size(); i++) {
+                for (int j = 0; j < particles.size(); j++) {
+                    //This calculates the total force between two particles. If the two particles are the same, the returned force is -1
+                    // TODO: 04-Jul-19 There seems to be an element of randomness in the way the particles behave. This should not be the case. This is almost certainly linked to the variation in the FPS
+                    //EXPERIMENTAL CODE ------------------------------------------------------------------------------------
+                    double force = (particles.get(i) != particles.get(j)) ?
+                            (particles.get(i).getMass() * particles.get(j).getMass() / Math.pow(particles.get(j).getLocation().distance(particles.get(i).getLocation()), 2) + DAMPENING) : -1;
 
-                double xDifference = particles.get(i).getLocation().getX() - particles.get(j).getLocation().getX();
-                double yDifference = particles.get(i).getLocation().getY() - particles.get(j).getLocation().getY();
-                if(force > 0) {
-                    particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass(),
-                            Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass()));
-                }
-                //Physics Calculations - COLLISION DETECTION
-                // TODO: 05-Jul-19 unexpected ArrayIndexOutOfBoundsException can rarely arise in the collision detection part
-                if(particles.get(j).getLocation().distance(particles.get(i).getLocation())
-                        < (particles.get(j).getDimensions()/2 + particles.get(i).getDimensions()/2)
-                        && particles.get(i) != particles.get(j)) {
-                    if(particles.get(j).getMass() > particles.get(i).getMass()) {
-                        //Larger particle changes its trajectory according to Newton's Third Law
-                        particles.get(j).setVelocity(
-                                new Point2D(
-                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
-                                                particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
-                                                (particles.get(j).getMass() + particles.get(i).getMass()),
-
-                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
-                                                particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
-                                                (particles.get(j).getMass() + particles.get(i).getMass())
-                                )
-                        );
-                        //Larger particle absorbs smaller particle
-                        particles.get(j).addMass(particles.get(i).getMass());
-                        particles.remove(particles.get(i));
+                    double xDifference = particles.get(i).getLocation().getX() - particles.get(j).getLocation().getX();
+                    double yDifference = particles.get(i).getLocation().getY() - particles.get(j).getLocation().getY();
+                    if (force > 0) {
+                        particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass(),
+                                Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass()));
                     }
-                    else {
+                    //Physics Calculations - COLLISION DETECTION
+                    // TODO: 05-Jul-19 unexpected ArrayIndexOutOfBoundsException can rarely arise in the collision detection part
+                    if (particles.get(j).getLocation().distance(particles.get(i).getLocation())
+                            < (particles.get(j).getDimensions() / 2 + particles.get(i).getDimensions() / 2)
+                            && particles.get(i) != particles.get(j)) {
+                        if (particles.get(j).getMass() > particles.get(i).getMass()) {
+                            //Larger particle changes its trajectory according to Newton's Third Law
+                            particles.get(j).setVelocity(
+                                    new Point2D(
+                                            (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
+                                                    particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
+                                                    (particles.get(j).getMass() + particles.get(i).getMass()),
 
-                        //Larger particle changes its trajectory according to Newton's Third Law
-                        particles.get(i).setVelocity(
-                                new Point2D(
-                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
-                                                particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
-                                                (particles.get(i).getMass() + particles.get(j).getMass()),
+                                            (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
+                                                    particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
+                                                    (particles.get(j).getMass() + particles.get(i).getMass())
+                                    )
+                            );
+                            //Larger particle absorbs smaller particle
+                            particles.get(j).addMass(particles.get(i).getMass());
+                            particles.remove(particles.get(i));
+                        } else {
 
-                                        (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
-                                                particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
-                                                (particles.get(i).getMass() + particles.get(j).getMass())
-                                )
-                        );
-                        //Larger particle absorbs smaller particle
-                        particles.get(i).addMass(particles.get(j).getMass());
-                        particles.remove(particles.get(j));
+                            //Larger particle changes its trajectory according to Newton's Third Law
+                            particles.get(i).setVelocity(
+                                    new Point2D(
+                                            (particles.get(j).getMass() * particles.get(j).getVelocity().getX() +
+                                                    particles.get(i).getMass() * particles.get(i).getVelocity().getX()) /
+                                                    (particles.get(i).getMass() + particles.get(j).getMass()),
+
+                                            (particles.get(j).getMass() * particles.get(j).getVelocity().getY() +
+                                                    particles.get(i).getMass() * particles.get(i).getVelocity().getY()) /
+                                                    (particles.get(i).getMass() + particles.get(j).getMass())
+                                    )
+                            );
+                            //Larger particle absorbs smaller particle
+                            particles.get(i).addMass(particles.get(j).getMass());
+                            particles.remove(particles.get(j));
+                        }
+
                     }
-
                 }
             }
         }
