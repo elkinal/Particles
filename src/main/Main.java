@@ -47,6 +47,7 @@ public class Main extends Application {
     //Self-Explanatory
     public static boolean paused = false;
     public static boolean drawPath = false;
+    public static boolean drawMesh = false;
 
     //Images
     private static Image background;
@@ -113,6 +114,8 @@ public class Main extends Application {
         scene.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.SPACE)
                 paused = !paused;
+            if(event.getCode() == KeyCode.M)
+                drawMesh = !drawMesh;
         });
 
 
@@ -129,8 +132,8 @@ public class Main extends Application {
         //Responding to when the right mouse button is released
         scene.setOnMouseReleased(event -> {
             if(event.getButton() == MouseButton.SECONDARY) {
-                drawPath = false;
                 particlePositions[1] = new Point2D(event.getX(), event.getY());
+                drawPath = false;
                 particles.add(new Particle(particleSize, Color.DARKBLUE, particlePositions[0].add(16,16), new Point2D(
                         (particlePositions[1].getX() - particlePositions[0].getX()) / 50,
                         (particlePositions[1].getY() - particlePositions[0].getY()) / 50
@@ -144,7 +147,7 @@ public class Main extends Application {
             if(event.getDeltaY() < 0)
                 particleSize += 50;
             else
-                particleSize -= (particleSize > 20) ? 20 : 0;
+                particleSize -= (particleSize > 50) ? 50 : 0;
         });
 
 
@@ -194,17 +197,34 @@ public class Main extends Application {
             drawPathLine(graphics);
         }
 
+        //Drawing the mesh
+        if(drawMesh)
+            drawMesh(graphics);
+
         //Drawing the pause screen when the game is paused
         if(paused)
             graphics.drawImage(pauseScreen, 0, 0, SCREENWIDTH, SCREENHEIGHT);
     }
 
+    private void drawMesh(GraphicsContext graphics) {
+        graphics.setLineWidth(0.5);
+        for (int i = 0; i < particles.size(); i++) {
+            for (int j = 0; j < particles.size(); j++) {
+                if(particles.get(i) != particles.get(j)) {
+                    graphics.setStroke(Color.GREEN);
+                    graphics.strokeLine(particles.get(i).getLocation().getX(), particles.get(i).getLocation().getY(), particles.get(j).getLocation().getX(), particles.get(j).getLocation().getY());
+                }
+            }
+        }
+        graphics.setLineWidth(1);
+    }
+
     private void drawPathLine(GraphicsContext graphics) {
         graphics.setStroke(Color.RED);
-        graphics.strokeLine(
+        graphics.strokeLine( // TODO: 11-Jul-19 This function makes the screen freeze for a few milliseconds when it is run
                 particlePositions[0].getX()+16, particlePositions[0].getY()+16,
-                particlePositions[0].getX()+16 - (particlePositions[0].getX() - MouseInfo.getPointerInfo().getLocation().getX()+16)/5,
-                particlePositions[0].getY()+16 - (particlePositions[0].getY() - MouseInfo.getPointerInfo().getLocation().getY()+16)/5
+                particlePositions[0].getX()+16 - (particlePositions[0].getX()-16 - MouseInfo.getPointerInfo().getLocation().getX()+16)/5,
+                particlePositions[0].getY()+16 - (particlePositions[0].getY()-16 - MouseInfo.getPointerInfo().getLocation().getY()+16)/5
         );
     }
 
@@ -215,7 +235,6 @@ public class Main extends Application {
     private void update() {
         //All calculations go here
         //Physics Calculations - MOVEMENT
-        particles.forEach(p -> p.tick());
         if(!paused) {
             for (int i = 0; i < particles.size(); i++) {
                 for (int j = 0; j < particles.size(); j++) {
@@ -265,13 +284,13 @@ public class Main extends Application {
                         // TODO: 04-Jul-19 There seems to be an element of randomness in the way the particles behave. This should not be the case. This is almost certainly linked to the variation in the FPS
                         //EXPERIMENTAL CODE ------------------------------------------------------------------------------------
                         double force = (particles.get(i) != particles.get(j)) ?
-                                (particles.get(i).getMass() * particles.get(j).getMass() / Math.pow(particles.get(j).getLocation().distance(particles.get(i).getLocation()), 2) + DAMPENING) : -1;
+                                GRAV_CONSTANT * (particles.get(i).getMass() * particles.get(j).getMass() / Math.pow(particles.get(j).getLocation().distance(particles.get(i).getLocation()), 2) + DAMPENING) : -1;
 
                         double xDifference = particles.get(i).getLocation().getX() - particles.get(j).getLocation().getX();
                         double yDifference = particles.get(i).getLocation().getY() - particles.get(j).getLocation().getY();
                         if (force > 0) {
-                            particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * GRAV_CONSTANT * force / particles.get(j).getMass(),
-                                    Math.signum(yDifference) * GRAV_CONSTANT * force / particles.get(j).getMass()));
+                            particles.get(j).accelerate(new Point2D(Math.signum(xDifference) * force / particles.get(j).getMass(),
+                                    Math.signum(yDifference) * force / particles.get(j).getMass()));
                         }
                     }
                 }
@@ -281,7 +300,7 @@ public class Main extends Application {
 
 
         //Ticking the Particles
-
+        particles.forEach(p -> p.tick());
 
         //Incrementing the number of elapsed frames (for development purposes)
         frames++;
