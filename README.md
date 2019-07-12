@@ -5,7 +5,7 @@ This is a visual representation of an N-body simulation. This project will demon
 ## How To Use & Installation
 
 ## Physics Explained
-#### __The Following Formulae are used in the simulation:__
+### The Following Formulae are used in the simulation:
 ***
 ![Gravity Equation](http://www.alexeyelkin.com/images/Gravity.gif)
 >**Newton's Law of Universal Gravitation** states that every [particle](https://en.wikipedia.org/wiki/Particle "Particle") attracts every other particle in the universe with a [force](https://en.wikipedia.org/wiki/Force "Force") which is [directly proportional](https://en.wikipedia.org/wiki/Proportionality_(mathematics)#Direct_proportionality "Proportionality (mathematics)") to the product of their masses and [inversely proportional](https://en.wikipedia.org/wiki/Proportionality_(mathematics)#Inverse_proportionality "Proportionality (mathematics)") to the square of the distance between their centers" - _**Wikipedia**_
@@ -108,3 +108,11 @@ particles.get(i).addMass(particles.get(j).getMass());
 particles.remove(particles.get(j));
 ```
 ***
+## Images
+![Gravity Equation](http://www.alexeyelkin.com/images/particles-picture-1.png)
+ *The Image above shows particles converging to the center of the screen. In This simulation, the particles started in a random arrangement from 0px - 1080px in a square of dimensions 1080 x 1080px in which they were evenly spread out. This meant that the overall center of gravity was approximately in the center of the screen. During the course of this simulation, the particles converged to the center of the screen and merged, until only one very large stationary particle was remaining.*
+
+![Gravity Equation](http://www.alexeyelkin.com/images/particles-picture-2.png)
+ *The Image above shows a small particle in a stable orbit around a larger particle*
+ ![Gravity Equation](http://www.alexeyelkin.com/images/particles-picture-3.png)
+ *The image above shows the forces acting on the particles through the "mesh" function. The user can enable the mesh by pressing 'M' on their keyboard while running the simulation. The mesh demonstrates that every particle exerts a gravitational force on every other particle.*
