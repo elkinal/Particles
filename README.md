@@ -7,7 +7,7 @@ This is a visual representation of an N-body simulation. This project will demon
 ## Physics Explained
 ### The Following Formulae are used in the simulation:
 ***
-![Gravity Equation](http://www.alexeyelkin.com/images/Gravity.gif)
+![Gravity Equation](http://www.alexeyelkin.com/images/particle_images/Gravity.gif)
 >**Newton's Law of Universal Gravitation** states that every [particle](https://en.wikipedia.org/wiki/Particle "Particle") attracts every other particle in the universe with a [force](https://en.wikipedia.org/wiki/Force "Force") which is [directly proportional](https://en.wikipedia.org/wiki/Proportionality_(mathematics)#Direct_proportionality "Proportionality (mathematics)") to the product of their masses and [inversely proportional](https://en.wikipedia.org/wiki/Proportionality_(mathematics)#Inverse_proportionality "Proportionality (mathematics)") to the square of the distance between their centers" - _**Wikipedia**_
 ```java
 //The First Line makes sure that the force is not calculated between a particle and itself
@@ -30,7 +30,7 @@ double force = (particles.get(i) != particles.get(j)) ?
          Math.pow(particles.get(j).getLocation().distance(particles.get(i).getLocation()), 2) + DAMPENING) : -1;
 ```
 ***
-![Gravity Equation](http://www.alexeyelkin.com/images/Force.gif)
+![Gravity Equation](http://www.alexeyelkin.com/images/particle_images/Force.gif)
 >**Newton's Second Law**: In an inertial frame of reference, the vector  [sum](https://en.wikipedia.org/wiki/Vector_sum "Vector sum")  of the  [forces](https://en.wikipedia.org/wiki/Forces "Forces")  **F**  on an object is equal to the  [mass](https://en.wikipedia.org/wiki/Mass "Mass")  _m_  of that object multiplied by the  [acceleration](https://en.wikipedia.org/wiki/Acceleration "Acceleration")  **a**  of the object:  **F**  =  _m_**a**. (It is assumed here that the mass  _m_  is constant). - _**Wikipedia**_
 ```java
 //The First 2 Lines are used to determine the difference between the locations fo the two particles
@@ -64,10 +64,10 @@ if (force > 0) {
 }
 ```
 ***
-![Gravity Equation](http://www.alexeyelkin.com/images/Collision.gif)
+![Gravity Equation](http://www.alexeyelkin.com/images/particle_images/Collision.gif)
 >A **Perfectly Inelastic Collision** occurs when the maximum amount of kinetic energy of a system is lost. In a perfectly inelastic collision, i.e., a zero [coefficient of restitution](https://en.wikipedia.org/wiki/Coefficient_of_restitution "Coefficient of restitution"), the colliding particles stick together. In such a collision, kinetic energy is lost by bonding the two bodies together. - _**Wikipedia**_
 >
-![Gravity Equation](http://www.alexeyelkin.com/images/Velocity.gif)
+![Gravity Equation](http://www.alexeyelkin.com/images/particle_images/Velocity.gif)
 >Where  **_V_**  is the final velocity, which is given by the formula above.
 ```java
 particles.get(j).setVelocity(  
@@ -109,10 +109,10 @@ particles.remove(particles.get(j));
 ```
 ***
 ## Images
-![Gravity Equation](http://www.alexeyelkin.com/images/particles-picture-1.png)
+![Gravity Equation](http://www.alexeyelkin.com/images/particle_images/particles-picture-1.png)
  *The Image above shows particles converging to the center of the screen. In This simulation, the particles started in a random arrangement from 0px - 1080px in a square of dimensions 1080 x 1080px in which they were evenly spread out. This meant that the overall center of gravity was approximately in the center of the screen. During the course of this simulation, the particles converged to the center of the screen and merged, until only one very large stationary particle was remaining.*
 
-![Gravity Equation](http://www.alexeyelkin.com/images/particles-picture-2.png)
+![Gravity Equation](http://www.alexeyelkin.com/images/particle_images/particles-picture-2.png)
  *The Image above shows a small particle in a stable orbit around a larger particle*
- ![Gravity Equation](http://www.alexeyelkin.com/images/particles-picture-3.png)
+ ![Gravity Equation](http://www.alexeyelkin.com/images/particle_images/particles-picture-3.png)
  *The image above shows the forces acting on the particles through the "mesh" function. The user can enable the mesh by pressing 'M' on their keyboard while running the simulation. The mesh demonstrates that every particle exerts a gravitational force on every other particle.*
