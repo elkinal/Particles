@@ -71,9 +71,9 @@ public class Main extends Application {
         SCREENWIDTH = (int) Screen.getPrimary().getBounds().getWidth();
 
         //Initializing the background image
-        background = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\background.png"));
+/*        background = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\background.png"));
         Image cursor = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\cursor.png"));
-        pauseScreen = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\paused_screen.png"));
+        pauseScreen = new Image(new FileInputStream("C:\\Users\\alxye\\IdeaProjects\\Particles\\src\\res\\paused_screen.png"));*/
 
         //TESTING AREA
         /*particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
@@ -93,8 +93,8 @@ public class Main extends Application {
 //        particles.add(new Particle(100, Color.BLUE, new Point2D(0, 500), new Point2D(5, 0)));
 
         //RANDOM PARTICLE TEST
-        for (int i = 0; i < 1000; i++) {
-            particles.add(new Particle((int)rand(10,10), Color.BLACK, new Point2D(rand(0, 1920), rand(0, 1080))));
+        for (int i = 0; i < 100; i++) {
+            particles.add(new Particle((int)rand(10,10), Color.BLACK, new Point2D(rand(0, SCREENWIDTH), rand(0, SCREENHEIGHT))));
         }
 
 
@@ -108,7 +108,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);
 
         //Changing the default cursor
-        scene.setCursor(new ImageCursor(cursor));
+//        scene.setCursor(new ImageCursor(cursor));
 
         //Responding to Keystrokes
         scene.setOnKeyPressed(event -> {
@@ -125,7 +125,6 @@ public class Main extends Application {
                 particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX()+16, event.getY()+16)));
             else if(event.getButton() == MouseButton.SECONDARY) {
                 particlePositions[0] = new Point2D(event.getX(), event.getY());
-                drawPath = true;
             }
         });
 
@@ -133,7 +132,6 @@ public class Main extends Application {
         scene.setOnMouseReleased(event -> {
             if(event.getButton() == MouseButton.SECONDARY) {
                 particlePositions[1] = new Point2D(event.getX(), event.getY());
-                drawPath = false;
                 particles.add(new Particle(particleSize, Color.DARKBLUE, particlePositions[0].add(16,16), new Point2D(
                         (particlePositions[1].getX() - particlePositions[0].getX()) / 50,
                         (particlePositions[1].getY() - particlePositions[0].getY()) / 50
@@ -193,17 +191,16 @@ public class Main extends Application {
         graphics.fillText("Particles: " + particles.size(), SCREENWIDTH-100, 24);
 
         //Drawing a line to show the path a particle will take when the user creates a particle with an initial velocity
-        if(drawPath) {
+        if(drawPath)
             drawPathLine(graphics);
-        }
 
         //Drawing the mesh
         if(drawMesh)
             drawMesh(graphics);
 
         //Drawing the pause screen when the game is paused
-        if(paused)
-            graphics.drawImage(pauseScreen, 0, 0, SCREENWIDTH, SCREENHEIGHT);
+/*        if(paused)
+            graphics.drawImage(pauseScreen, 0, 0, SCREENWIDTH, SCREENHEIGHT);*/
     }
 
     private void drawMesh(GraphicsContext graphics) {
