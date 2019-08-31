@@ -122,7 +122,7 @@ public class Main extends Application {
         //Responding to when a mouse button is pressed
         scene.setOnMousePressed(event -> {
             if(event.getButton() == MouseButton.PRIMARY)
-                particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX()+16, event.getY()+16)));
+                particles.add(new Particle(particleSize, Color.BLUE, new Point2D(event.getX(), event.getY())));
             else if(event.getButton() == MouseButton.SECONDARY) {
                 particlePositions[0] = new Point2D(event.getX(), event.getY());
             }
@@ -132,7 +132,7 @@ public class Main extends Application {
         scene.setOnMouseReleased(event -> {
             if(event.getButton() == MouseButton.SECONDARY) {
                 particlePositions[1] = new Point2D(event.getX(), event.getY());
-                particles.add(new Particle(particleSize, Color.DARKBLUE, particlePositions[0].add(16,16), new Point2D(
+                particles.add(new Particle(particleSize, Color.DARKBLUE, particlePositions[0].add(0,0), new Point2D(
                         (particlePositions[1].getX() - particlePositions[0].getX()) / 50,
                         (particlePositions[1].getY() - particlePositions[0].getY()) / 50
                 )));
