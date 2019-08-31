@@ -39,6 +39,7 @@ public class Main extends Application {
 
     //This list stores all of particles in the entire simulation
     private ArrayList<Particle> particles = new ArrayList<>();
+    private ArrayList<Particle> particlesToRemove = new ArrayList<>();
 
     //Gravitational Constant
     public static double GRAV_CONSTANT = 0.1;
@@ -84,7 +85,7 @@ public class Main extends Application {
         particles.get(0).setVelocity(new Point2D(1, 0));
         particles.get(1).setVelocity(new Point2D(-1, 0));
         particles.get(2).setVelocity(new Point2D(-1, 0));
-        particles.get(3).setVelocity(new Point2D(-1, 0));*/
+        particles.get(3).setVelocity(new Point2D(-1, 0));
 
         //ORBITALS TEST
         /*particles.add(new Particle(1000, Color.RED, new Point2D(600, 500)));
@@ -93,10 +94,13 @@ public class Main extends Application {
 //        particles.add(new Particle(100, Color.BLUE, new Point2D(0, 500), new Point2D(5, 0)));
 
         //RANDOM PARTICLE TEST
-        for (int i = 0; i < 100; i++) {
+        /*for (int i = 0; i < 100; i++) {
             particles.add(new Particle((int)rand(10,10), Color.BLACK, new Point2D(rand(0, SCREENWIDTH), rand(0, SCREENHEIGHT))));
-        }
-
+        }*/
+        particles.add(new Particle(300, Color.RED, new Point2D(500, 500)));
+        particles.add(new Particle(100, Color.RED, new Point2D(800, 500)));
+        particles.add(new Particle(100, Color.RED, new Point2D(1000, 500)));
+        particles.add(new Particle(100, Color.BLUE, new Point2D(650, 500)));
 
         //Forces the game to be played full-screen
         primaryStage.setTitle("N-Body Simulation");
@@ -239,7 +243,7 @@ public class Main extends Application {
                     // TODO: 05-Jul-19 unexpected ArrayIndexOutOfBoundsException can rarely arise in the collision detection part
                     if (particles.get(j).getLocation().distance(particles.get(i).getLocation())
                             < (particles.get(j).getDimensions() / 2 + particles.get(i).getDimensions() / 2)
-                            && particles.get(i) != particles.get(j)) {
+                            && particles.get(i) != particles.get(j) && !(particlesToRemove.contains(particles.get(i)) || (particlesToRemove.contains(particles.get(j))))) {
                         if (particles.get(j).getMass() > particles.get(i).getMass()) {
                             //Larger particle changes its trajectory according to Newton's Third Law
                             particles.get(j).setVelocity(
@@ -255,7 +259,8 @@ public class Main extends Application {
                             );
                             //Larger particle absorbs smaller particle
                             particles.get(j).addMass(particles.get(i).getMass());
-                            particles.remove(particles.get(i));
+                            particlesToRemove.add(particles.get(i));
+//                            particles.remove(particles.get(i));
                         } else {
 
                             //Larger particle changes its trajectory according to Newton's Third Law
@@ -272,7 +277,8 @@ public class Main extends Application {
                             );
                             //Larger particle absorbs smaller particle
                             particles.get(i).addMass(particles.get(j).getMass());
-                            particles.remove(particles.get(j));
+                            particlesToRemove.add(particles.get(j));
+//                            particles.remove(particles.get(j));
                         }
 
                     }
@@ -292,6 +298,8 @@ public class Main extends Application {
                     }
                 }
             }
+            particlesToRemove.forEach(p -> particles.remove(p));
+            particlesToRemove.clear();
         }
 
 
@@ -312,7 +320,7 @@ public class Main extends Application {
 
 
     //Generates a random number between "max" and "min"
-    public static float rand(float min, float max) {
+    private static float rand(float min, float max) {
         return new Random().nextInt((int) (max - min + 1)) + min;
     }
 
