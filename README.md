@@ -125,6 +125,7 @@ particles.remove(particles.get(j));
  *The Image above shows particles converging to the center of the screen. In This simulation, the particles started in a random arrangement from 0px - 1080px in a square of dimensions 1080 x 1080px in which they were evenly spread out. This meant that the overall center of gravity was approximately in the center of the screen. During the course of this simulation, the particles converged to the center of the screen and merged, until only one very large stationary particle was remaining.*
 
 ![Gravity Equation](http://www.alexeyelkin.com/images/orbital.png)
+
  *The Image above shows a small particle in a stable orbit around a larger particle*
  ![Gravity Equation](http://www.alexeyelkin.com/images/arrangement.png)
  *The image above shows the forces acting on the particles through the "mesh" function. The user can enable the mesh by pressing 'M' on their keyboard while running the simulation. The mesh demonstrates that every particle exerts a gravitational force on every other particle.*
