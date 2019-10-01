@@ -10,10 +10,15 @@ http://www.alexeyelkin.com
 In order to run the project, it must be extracted from its **rar** format. This can be done with **WinRar** Software. 
 
 ## Controls
+
 **M** - Show Mesh
+
 **SPACE** - Pause
+
 **Left Mouse Click** - Generate Particle
+
 **Right Mouse Click + drag** - Generate Particle with an initial velocity
+
 **SCROLL** - Change the initial size of the generated particle.
 
 ## Physics Explained
